@@ -51,7 +51,8 @@
     "undici": "*",
     "vite": "^5.2.10",
     "vite-tsconfig-paths": "^4.2.1",
-    "wrangler": "^3.0.0"
+    "wrangler": "^3.0.0",
+    "tailwindcss-animate": "^1.0.7"
   },
   "nx": {}
 }
