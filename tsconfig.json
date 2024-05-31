@@ -20,6 +20,6 @@
       "~/*": ["./src/*"]
     }
   },
-  "files": ["./.eslintrc.cjs"],
+  "files": ["./.eslintrc.cjs", "./api/index.js"],
   "include": ["src", "./*.d.ts", "./*.config.ts"]
 }
