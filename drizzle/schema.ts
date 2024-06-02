@@ -1,29 +1,29 @@
-import { sqliteTable, integer, text } from "drizzle-orm/sqlite-core";
+import { pgTable, integer, varchar } from "drizzle-orm/pg-core";
 import { generateId } from "lucia";
 
-export const userTable = sqliteTable("user", {
-  id: text("id")
+export const userTable = pgTable("user", {
+  id: varchar("id")
     .primaryKey()
     .$defaultFn(() => generateId(15)),
-  passwordHash: text("passwordHash").notNull(),
-  username: text("username").notNull(),
+  passwordHash: varchar("passwordHash").notNull(),
+  username: varchar("username").notNull(),
   // other user attributes
-  name: text("name", {
-    length: 255,
+  name: varchar("name", {
+    length: 55,
   }),
-  lastName: text("last_name", {
-    length: 255,
+  lastName: varchar("last_name", {
+    length: 55,
   }),
-  email: text("email", {
-    length: 255,
+  email: varchar("email", {
+    length: 100,
   }),
 });
 
 export type SelectUser = typeof userTable.$inferSelect;
 
-export const sessionTable = sqliteTable("session", {
-  id: text("id").notNull().primaryKey(),
-  userId: text("user_id")
+export const sessionTable = pgTable("session", {
+  id: varchar("id").notNull().primaryKey(),
+  userId: varchar("user_id")
     .notNull()
     .references(() => userTable.id),
   expiresAt: integer("expires_at").notNull(),
