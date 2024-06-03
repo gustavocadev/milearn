@@ -1,13 +1,12 @@
 // src/server/lucia.ts
 import { Lucia } from 'lucia';
-import { DrizzleSQLiteAdapter } from '@lucia-auth/adapter-drizzle';
+import { DrizzlePostgreSQLAdapter } from '@lucia-auth/adapter-drizzle';
 import { qwikLuciaConfig } from 'qwik-lucia';
 import { SelectUser, sessionTable, userTable } from '../../../drizzle/schema';
 import { db } from '../drizzle/db';
 
 
-// @ts-ignore
-const adapter = new DrizzleSQLiteAdapter(db, sessionTable, userTable);
+const adapter = new DrizzlePostgreSQLAdapter(db, sessionTable, userTable);
 
 export const lucia = new Lucia(adapter, {
   sessionCookie: {
