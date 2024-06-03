@@ -1,8 +1,8 @@
-import { pgTable, integer, varchar } from "drizzle-orm/pg-core";
+import { pgTable, varchar, text, timestamp } from "drizzle-orm/pg-core";
 import { generateId } from "lucia";
 
 export const userTable = pgTable("user", {
-  id: varchar("id")
+  id: text("id")
     .primaryKey()
     .$defaultFn(() => generateId(15)),
   passwordHash: varchar("passwordHash").notNull(),
@@ -22,11 +22,14 @@ export const userTable = pgTable("user", {
 export type SelectUser = typeof userTable.$inferSelect;
 
 export const sessionTable = pgTable("session", {
-  id: varchar("id").notNull().primaryKey(),
-  userId: varchar("user_id")
+  id: text("id").primaryKey(),
+  userId: text("user_id")
     .notNull()
     .references(() => userTable.id),
-  expiresAt: integer("expires_at").notNull(),
+  expiresAt: timestamp("expires_at", {
+    withTimezone: true,
+    mode: "date",
+  }).notNull(),
 });
 
 export type SelectSession = typeof sessionTable.$inferSelect;
