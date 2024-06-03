@@ -1,11 +1,25 @@
 import { component$ } from "@builder.io/qwik";
-import { Form, Link, routeAction$, z, zod$ } from "@builder.io/qwik-city";
+import {
+  Form,
+  Link,
+  type RequestHandler,
+  routeAction$,
+  z,
+  zod$,
+} from "@builder.io/qwik-city";
 import { hashPassword } from "qwik-lucia";
 import { InputWithLabel } from "~/components/shared/InputWithLabel";
 import { Button } from "~/components/ui/button/button";
 import { db } from "~/server/drizzle/db";
 import { userTable } from "../../../drizzle/schema";
 import pg from "pg";
+
+export const onRequest: RequestHandler = async ({ sharedMap, redirect }) => {
+  const user = sharedMap.get("user");
+  if (user) {
+    throw redirect(303, "/");
+  }
+};
 
 export const useSignupAction = routeAction$(
   async (values, { redirect, fail }) => {
