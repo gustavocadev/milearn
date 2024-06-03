@@ -1,55 +1,37 @@
 import { component$ } from "@builder.io/qwik";
-import { Form, Link, routeAction$, z, zod$ } from "@builder.io/qwik-city";
+import {
+  Form,
+  Link,
+  type RequestHandler,
+  routeAction$,
+  z,
+  zod$,
+} from "@builder.io/qwik-city";
 import { Button } from "~/components/ui/button/button";
 import { Input } from "~/components/ui/input/input";
-import { handleRequest, lucia } from "~/server/auth/lucia";
-import { db } from "~/server/drizzle/db";
-import { userTable } from "../../../drizzle/schema";
-import { eq } from "drizzle-orm";
-import { verifyPassword } from "qwik-lucia";
+
+import { login } from "~/server/services/auth/auth";
+import { handleRequest } from "~/server/services/auth/lucia";
+
+export const onRequest: RequestHandler = async ({ sharedMap, redirect }) => {
+  const user = sharedMap.get("user");
+  if (user) {
+    throw redirect(303, "/");
+  }
+};
 
 export const useLoginAction = routeAction$(
   async (values, { cookie, fail, redirect }) => {
     // Important! Use `handleRequest` to handle the authentication request
     const authRequest = handleRequest({ cookie });
 
-    try {
-      //1. search for user
-      const [user] = await db
-        .select({
-          id: userTable.id,
-          passwordHash: userTable.passwordHash,
-          username: userTable.username,
-        })
-        .from(userTable)
-        .where(eq(userTable.username, values.username));
+    const { message, session } = await login(values.username, values.password);
 
-      //2. if user is not found, throw error
-      if (!user) {
-        return fail(400, {
-          message: "Incorrect username or password",
-        });
-      }
+    // if the login fails, return a 400 status code with a message
+    if (!session) return fail(400, { message });
 
-      // 3. validate password
-      const isValidPassword = await verifyPassword(
-        user.passwordHash,
-        values.password,
-      );
+    authRequest.setSession(session); // set session cookie
 
-      if (!isValidPassword) {
-        return fail(400, {
-          message: "Incorrect username or password",
-        });
-      }
-
-      // 4. create session
-      const session = await lucia.createSession(user.id, {});
-
-      authRequest.setSession(session); // set session cookie
-    } catch (e) {
-      console.error(e);
-    }
     // make sure you don't throw inside a try/catch block!
     throw redirect(303, "/");
   },
