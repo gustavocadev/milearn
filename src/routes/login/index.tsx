@@ -47,7 +47,6 @@ export const useLoginAction = routeAction$(
       const session = await lucia.createSession(user.id, {});
 
       authRequest.setSession(session); // set session cookie
-      console.log("session", session);
     } catch (e) {
       console.error(e);
     }
