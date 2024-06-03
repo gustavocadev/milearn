@@ -37,6 +37,7 @@
     "@qwik-ui/headless": "^0.4.2",
     "@qwik-ui/styled": "^0.1.0",
     "@qwik-ui/utils": "^0.2.1",
+    "@qwikest/icons": "^0.0.13",
     "@types/compression": "^1.7.2",
     "@types/eslint": "^8.56.10",
     "@types/express": "^4.17.19",
