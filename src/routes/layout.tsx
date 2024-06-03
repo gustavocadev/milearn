@@ -1,7 +1,8 @@
 import { component$, Slot } from "@builder.io/qwik";
-import type { RequestHandler } from "@builder.io/qwik-city";
+import { routeLoader$, type RequestHandler } from "@builder.io/qwik-city";
+import type { User } from "lucia";
 import { Navbar } from "~/components/shared/navbar";
-import { handleRequest } from "~/server/auth/lucia";
+import { handleRequest } from "~/server/services/auth/lucia";
 
 export const onGet: RequestHandler = async ({ cacheControl }) => {
   // Control caching for this request for best performance and to reduce hosting costs:
@@ -23,10 +24,17 @@ export const onRequest: RequestHandler = async ({ cookie, sharedMap }) => {
   sharedMap.set("session", session);
 };
 
+export const useUser = routeLoader$(({ sharedMap }) => {
+  const user = sharedMap.get("user") as User | undefined;
+
+  return user;
+});
+
 export default component$(() => {
+  const user = useUser();
   return (
     <>
-      <Navbar />
+      {!user.value && <Navbar />}
       <Slot />
     </>
   );
