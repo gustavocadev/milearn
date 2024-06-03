@@ -1,14 +1,5 @@
 import { component$ } from "@builder.io/qwik";
-import type { DocumentHead, RequestHandler } from "@builder.io/qwik-city";
-import { handleRequest } from "~/server/services/auth/lucia";
-
-export const onRequest: RequestHandler = async (event) => {
-  const authRequest = handleRequest(event);
-  const { user } = await authRequest.validateUser();
-  if (!user) {
-    throw event.redirect(303, "/login");
-  }
-};
+import type { DocumentHead } from "@builder.io/qwik-city";
 
 // Welcome to the user to login the app
 export default component$(() => {
