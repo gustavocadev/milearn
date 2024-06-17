@@ -19,7 +19,7 @@ export const Sidebar = component$(() => {
 
   return (
     <aside
-      class="h-screen w-64 -translate-x-full border-r border-gray-200 bg-white transition-transform sm:translate-x-0"
+      class="hidden h-screen w-64 -translate-x-full border-r border-gray-200 bg-white transition-transform sm:translate-x-0 md:block"
       aria-label="Sidebar"
     >
       <div class="h-full overflow-y-auto bg-white px-3 py-4">

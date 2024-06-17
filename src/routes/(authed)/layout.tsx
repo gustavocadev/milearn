@@ -1,5 +1,11 @@
+// @ts-nocheck
+
 import { Slot, component$ } from "@builder.io/qwik";
-import type { RequestHandler } from "@builder.io/qwik-city";
+import {
+  useLocation,
+  useNavigate,
+  type RequestHandler,
+} from "@builder.io/qwik-city";
 import { LuCheck } from "@qwikest/icons/lucide";
 import { Sidebar } from "~/components/shared/sidebar";
 import { Select } from "~/components/ui/select/select";
@@ -32,13 +38,23 @@ export default component$(() => {
     "Urdu",
     "Turkish",
   ];
+  const nav = useNavigate();
+  const loc = useLocation();
 
   return (
     <div class="flex">
-      <Sidebar />
-      <div>
+      <div class="xl:w-2/12">
+        <Sidebar />
+      </div>
+      <div class="w-full">
         <nav class="flex items-center p-4">
-          <Select.Root>
+          <Select.Root
+            onChange$={(value: string) => {
+              const url = new URL(loc.url);
+              url.searchParams.set("lang", value.toLowerCase());
+              nav(url.href);
+            }}
+          >
             {/* <Select.Label>Select a language</Select.Label> */}
             <Select.Trigger>
               <Select.DisplayValue placeholder="Select an option" />
