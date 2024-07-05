@@ -17,6 +17,7 @@ export const buttonVariants = cva(
           "border bg-background text-foreground shadow-sm hover:bg-accent active:shadow-base active:press",
         ghost: "text-accent-foreground hover:bg-accent",
         link: "text-foreground hover:bg-transparent hover:text-foreground/80 hover:underline hover:underline-offset-2",
+        destructive: "bg-red-500 text-white hover:bg-red-600 active:bg-red-700",
       },
       size: {
         sm: "h-8 px-2 py-1.5 text-sm",
