@@ -57,7 +57,9 @@ export default component$(() => {
           placeholder="Password"
           required
         />
-        <Button type="submit">Log in</Button>
+        <Button type="submit" disabled={loginAction.isRunning}>
+          Log in
+        </Button>
 
         <p>
           Don't have an account?{" "}
